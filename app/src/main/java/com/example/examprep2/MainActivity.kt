@@ -16,35 +16,38 @@ class MainActivity : AppCompatActivity() ,Communicator{
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadData()
-       binding.savebtn.setOnClickListener {
-           saveData()
-       }
+        binding.apply {
+            val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+            val sharedstring = sharedPreferences.getString("STRING_KEY",null)
+            Log.d("_log",sharedstring.toString())
+            binding.tv1.setText(sharedstring.toString())
 
+            binding.savebtn.setOnClickListener {
+                val edittext = binding.ett1.text
+                val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                binding.tv1.text =  edittext
+                Log.d("_log", edittext.toString())
+                editor.apply {
+                    putString("STRING_KEY",edittext.toString())
+                    apply()
+                }
+
+            }
+        }
         //dynamically adding a fragment
         supportFragmentManager.beginTransaction().replace(R.id.frame1,BlankFragment()).commit()
     }
     private fun saveData(){
         val binding = ActivityMainBinding.inflate(layoutInflater)
-        val edittext = binding.ett1.text
-        val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        binding.tv1.setText("asdlfkj")
-        Log.d("_log","drooooo")
-       editor.apply {
-          putString("STRING_KEY",edittext.toString())
-
-       }.apply()
-        Toast.makeText(this,"sucess vro",Toast.LENGTH_SHORT).show()
     }
 
    private fun loadData(){
        val binding = ActivityMainBinding.inflate(layoutInflater)
-       val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
-       val sharedstring = sharedPreferences.getString("STRING_KEY","key")
+       val sharedPreferences = getSharedPreferences("sharedPrefs", Context.MODE_PRIVATE)
+       val sharedstring = sharedPreferences.getString("STRING_KEY",null)
        Log.d("_log",sharedstring.toString())
-       binding.tv1.setText(sharedstring.toString()
-       )
+       binding.tv1.setText(sharedstring.toString())
    }
 
 
